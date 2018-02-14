@@ -269,7 +269,9 @@ def dlimport(fullpath, suffix=None):
     if not os.path.isabs(fullpath):
         raise ValueError('`fullpath` must be an absolute path', fullpath)
     if suffix is None:
-        if fullpath.endswith('.so'):
+        if fullpath.endswith('.pypy-41.so'):
+            suffix = '.pypy-41.so'
+        elif fullpath.endswith('.so'):
             suffix = '.so'
         elif fullpath.endswith('.pyd'):
             suffix = '.pyd'
@@ -1679,15 +1681,19 @@ def std_lib_dirs_and_libs():
         # get the name of the python library (shared object)
         libname = distutils.sysconfig.get_config_var("LDLIBRARY")
 
-        if libname.startswith("lib"):
-            libname = libname[3:]
+        if libname:
+            if libname.startswith("lib"):
+                libname = libname[3:]
 
-        # remove extension if present
-        if libname.endswith(".so"):
-            libname = libname[:-3]
-        elif libname.endswith(".a"):
-            libname = libname[:-2]
+            # remove extension if present
+            if libname.endswith(".so"):
+                libname = libname[:-3]
+            elif libname.endswith(".a"):
+                libname = libname[:-2]
+        else:
+            libname = "pypy-c"
 
+        # Must create a copy of pypy-c in prefix/lib
         libdir = distutils.sysconfig.get_config_var("LIBDIR")
 
         std_lib_dirs_and_libs.data = [libname], [libdir]
@@ -2277,7 +2283,7 @@ class GCC_compiler(Compiler):
 
         lib_filename = os.path.join(
             location,
-            '%s.%s' % (module_name, get_lib_extension()))
+            '%s.%s.%s' % (module_name, "pypy-41", get_lib_extension()))
 
         _logger.debug('Generating shared lib %s', lib_filename)
         cmd = [theano.config.cxx, get_gcc_shared_library_arg(), '-g']
