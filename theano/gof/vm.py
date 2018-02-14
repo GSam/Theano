@@ -983,7 +983,7 @@ class VM_Linker(link.LocalLinker):
                 if oidx in update_in_from_out:
                     update_storage.append(update_in_from_out[oidx])
 
-            c0 = sys.getrefcount(node_n_inputs)
+            #c0 = sys.getrefcount(node_n_inputs)
             vm = CVM(
                 nodes,
                 thunks,
@@ -1006,7 +1006,7 @@ class VM_Linker(link.LocalLinker):
                 update_storage=update_storage,
                 dependencies=dependency_map_list,
             )
-            assert c0 == sys.getrefcount(node_n_inputs)
+            #assert c0 == sys.getrefcount(node_n_inputs)
         else:
             lazy = self.lazy
             if lazy is None:
