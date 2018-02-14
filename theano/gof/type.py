@@ -606,8 +606,8 @@ class Generic(SingletonType):
 
 generic = Generic()
 
-_cdata_type = ctypes.py_object.from_address(
-    ctypes.addressof(ctypes.pythonapi.PyCapsule_Type)).value
+#_cdata_type = ctypes.py_object.from_address(
+#    ctypes.addressof(ctypes.pythonapi.PyCapsule_Type)).value
 
 
 class _make_cdata(Op):
@@ -679,8 +679,8 @@ class CDataType(Type):
         self.version = version
 
     def filter(self, data, strict=False, allow_downcast=None):
-        if data is not None and not isinstance(data, _cdata_type):
-            raise TypeError("expected None or a PyCapsule")
+        #if data is not None and not isinstance(data, _cdata_type):
+        #    raise TypeError("expected None or a PyCapsule")
         return data
 
     def _get_func(self):
